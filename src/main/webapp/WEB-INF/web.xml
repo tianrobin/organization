@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app id="WebApp_ID" version="2.4"
+	xmlns="http://java.sun.com/xml/ns/j2ee" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/j2ee http://java.sun.com/xml/ns/j2ee/web-app_2_4.xsd">
+  	<display-name>CustomApp</display-name>
+
+	<context-param>
+		<param-name>contextConfigLocation</param-name>
+		<param-value>classpath*:applicationContext-*.xml</param-value>
+	</context-param>
+   <!--  Spring 容器启动监听器 -->
+    <listener>
+        <listener-class>org.springframework.web.context.ContextLoaderListener
+        </listener-class>
+    </listener>
+	<servlet>
+		<servlet-name>CustomApp</servlet-name>
+		<servlet-class>org.springframework.web.servlet.DispatcherServlet</servlet-class>
+		<load-on-startup>2</load-on-startup>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>CustomApp</servlet-name>
+		<url-pattern>*.html</url-pattern>
+	</servlet-mapping>
+		 <!-- DWR 集成 -->
+    <servlet>  
+	    <servlet-name>dwr-invoker</servlet-name>  
+	    <servlet-class>org.directwebremoting.spring.DwrSpringServlet </servlet-class>  
+	    <init-param>  
+	        <param-name>debug</param-name>  
+	        <param-value>true</param-value>  
+	    </init-param>
+	    <init-param>  
+	        <description>日志级别有效值为： FATAL, ERROR, WARN (the default), INFO and DEBUG.</description>  
+	        <param-name>logLevel</param-name>  
+	        <param-value>DEBUG</param-value>  
+   		</init-param>  
+        <init-param>  
+	        <description>是否激活反向Ajax</description>  
+	        <param-name>activeReverseAjaxEnabled</param-name>  
+	        <param-value>true</param-value>  
+        </init-param>  
+        <init-param>     
+	         <description>在WEB启动时是否创建范围为application的creator</description>     
+	         <param-name>initApplicationScopeCreatorsAtStartup</param-name>     
+	         <param-value>true</param-value>     
+        </init-param>     
+	    <init-param>  
+	        <description>在WEB启动时是否创建范围为application的creator</description>     
+	        <param-name>preferDataUrlSchema</param-name>  
+	        <param-value>false</param-value>  
+	    </init-param>  
+	    <load-on-startup>1</load-on-startup>     
+	</servlet>  
+	<servlet-mapping>  
+  		 <servlet-name>dwr-invoker</servlet-name>  
+    	 <url-pattern>/dwr/*</url-pattern> 
+	</servlet-mapping> 
+	<!-- DWR 集成 --> 
+	<!-- session 时间设置 -->
+	<session-config>
+	    <session-timeout>30</session-timeout>   
+	</session-config>
+	<!-- session 时间设置 -->
+	<!-- spring集成 拦截器 -->
+	<filter>
+		<filter-name>Spring character encoding filter</filter-name>
+		<filter-class>org.springframework.web.filter.CharacterEncodingFilter</filter-class>
+		<init-param>
+			<param-name>encoding</param-name>
+			<param-value>GBK</param-value>
+		</init-param>
+	</filter>
+
+	<filter-mapping>
+		<filter-name>Spring character encoding filter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<!-- spring集成 拦截器 -->
+	<!-- hibernate集成拦截器 -->
+	<filter>
+		<filter-name>hibernateFilter</filter-name>
+		<filter-class>org.springframework.orm.hibernate3.support.OpenSessionInViewFilter</filter-class>
+		 <init-param>
+            <param-name>sessionFactoryBeanName</param-name>
+            <param-value>sessionFactory</param-value>
+        </init-param>
+        <init-param>
+            <param-name>singleSession</param-name>
+            <param-value>true</param-value>
+        </init-param>
+        <init-param>
+            <param-name>flushMode</param-name>
+            <param-value>AUTO</param-value>
+        </init-param>
+
+	</filter>
+	<filter-mapping>
+		<filter-name>hibernateFilter</filter-name>
+		<url-pattern>/*</url-pattern>
+	</filter-mapping>
+	<!-- hibernate集成拦截器 -->
+
+
+	<welcome-file-list>
+		<welcome-file>/index.html</welcome-file>
+	</welcome-file-list>
+</web-app>
